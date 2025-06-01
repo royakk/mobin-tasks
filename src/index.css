@@ -1,3 +1,15 @@
+@font-face {
+  font-family: "Vazir";
+  src: url("/fonts/Vazir.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Vazir";
+  src: url("/fonts/Vazir-Bold-UI.woff2") format("woff2");
+  font-weight: bold;
+  font-style: normal;
+}
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -28,6 +40,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  font-family: 'Vazir-Bold-UI', sans-serif;
 }
 
 h1 {

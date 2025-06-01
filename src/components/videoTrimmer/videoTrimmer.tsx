@@ -1,40 +1,20 @@
-import  { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { Button, Card, Alert, Space } from "antd";
 import { PlusOutlined, CheckOutlined } from "@ant-design/icons";
 import Timeline from "./timeline";
-import type { VideoCut, VideoTrimmerProps } from "../types";
+import type { VideoCut, VideoTrimmerProps } from "../../types";
 import { twMerge } from "tailwind-merge";
-import { useToast } from "../hooks/useToast";
+import { useToast } from "../../hooks/useToast";
+import { defaultCuts } from "../../data/mockData";
 
 const VideoTrimmer = ({
   totalDuration = 220,
   initialCuts = [],
   onCutsChange,
 }: VideoTrimmerProps) => {
-  const { showMessage,showModal } = useToast();
+  const { showMessage, showModal } = useToast();
   const [cuts, setCuts] = useState<VideoCut[]>(
-    initialCuts.length > 0
-      ? initialCuts
-      : [
-          {
-            id: "1",
-            startTime: 20,
-            endTime: 80,
-            label: "برش ۱",
-          },
-          {
-            id: "2",
-            startTime: 100,
-            endTime: 160,
-            label: "برش ۲",
-          },
-          {
-            id: "3",
-            startTime: 180,
-            endTime: 210,
-            label: "برش ۳",
-          },
-        ]
+    initialCuts.length > 0 ? initialCuts : defaultCuts
   );
 
   const formatDuration = (seconds: number): string => {
@@ -42,7 +22,7 @@ const VideoTrimmer = ({
       return `${seconds} ثانیه`;
     }
     const mins = Math.floor(seconds / 60);
-    const remainingSecs = seconds % 60;
+    const remainingSecs = Math.floor(seconds % 60);
     if (remainingSecs === 0) {
       return `${mins} دقیقه`;
     }
@@ -84,8 +64,8 @@ const VideoTrimmer = ({
     const updatedCuts = [...cuts, newCut];
     setCuts(updatedCuts);
     onCutsChange?.(updatedCuts);
-    showMessage("برش جدید اضافه شد","success")
-  }, [cuts, totalDuration, onCutsChange,]);
+    showMessage("برش جدید اضافه شد", "success");
+  }, [cuts, totalDuration, onCutsChange]);
 
   const updateCut = useCallback(
     (cutId: string, updates: Partial<VideoCut>) => {
@@ -103,7 +83,7 @@ const VideoTrimmer = ({
       const updatedCuts = cuts.filter((cut) => cut.id !== cutId);
       setCuts(updatedCuts);
       onCutsChange?.(updatedCuts);
-    showMessage("برش حذف شد","info")
+      showMessage("برش حذف شد", "info");
     },
     [cuts, onCutsChange]
   );
@@ -112,7 +92,10 @@ const VideoTrimmer = ({
     0
   );
   const handleConfirm = () => {
-    showModal(`مجموع زمان برش شده :${formatDuration(totalCutDuration)}`,"info")
+    showModal(
+      `مجموع زمان برش شده :${formatDuration(totalCutDuration)}`,
+      "info"
+    );
   };
 
   return (

@@ -2,7 +2,7 @@ import React, { useState, useRef, useCallback, useEffect } from "react";
 import { Button, Flex, Input } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import { twMerge } from "tailwind-merge";
-import type { TimelineProps } from "../types";
+import type { TimelineProps } from "../../types";
 
 const Timeline = ({
   cut,

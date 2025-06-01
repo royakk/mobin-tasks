@@ -1,7 +1,5 @@
-import React from 'react'
+import { PollList } from "../../components/poll/pollList";
 
-export const Poll = () => {
-  return (
-    <div>Poll</div>
-  )
-}
+export const PollPage = () => {
+  return <PollList />;
+};
