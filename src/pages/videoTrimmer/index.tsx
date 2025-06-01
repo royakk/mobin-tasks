@@ -1,14 +1,18 @@
-import React from "react";
 
 import VideoTrimmer from "../../components/videoTrimmer";
-
-export const VideoTrimmerPage: React.FC = () => {
+import { App as AntdApp, ConfigProvider } from "antd";
+export const VideoTrimmerPage = () => {
   const handleCutsChange = (cuts: any[]) => {
+    console.log('cuttingTimes', cuts)
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <VideoTrimmer totalDuration={220} onCutsChange={handleCutsChange} />
-    </div>
+    <ConfigProvider >
+      <AntdApp>
+        <div className="min-h-screen bg-gray-50 py-8">
+          <VideoTrimmer totalDuration={220} onCutsChange={handleCutsChange} />
+        </div>
+      </AntdApp>
+    </ConfigProvider>
   );
 };

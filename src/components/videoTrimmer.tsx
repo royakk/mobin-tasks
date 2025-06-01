@@ -1,16 +1,17 @@
-import React, { useState, useCallback, useMemo } from "react";
-import { Button, Card, Alert, Space, App } from "antd";
+import  { useState, useCallback, useMemo } from "react";
+import { Button, Card, Alert, Space } from "antd";
 import { PlusOutlined, CheckOutlined } from "@ant-design/icons";
 import Timeline from "./timeline";
 import type { VideoCut, VideoTrimmerProps } from "../types";
 import { twMerge } from "tailwind-merge";
+import { useToast } from "../hooks/useToast";
 
-const VideoTrimmer: React.FC<VideoTrimmerProps> = ({
+const VideoTrimmer = ({
   totalDuration = 220,
   initialCuts = [],
   onCutsChange,
-}) => {
-  const { message } = App.useApp();
+}: VideoTrimmerProps) => {
+  const { showMessage,showModal } = useToast();
   const [cuts, setCuts] = useState<VideoCut[]>(
     initialCuts.length > 0
       ? initialCuts
@@ -33,7 +34,7 @@ const VideoTrimmer: React.FC<VideoTrimmerProps> = ({
             endTime: 210,
             label: "برش ۳",
           },
-        ],
+        ]
   );
 
   const formatDuration = (seconds: number): string => {
@@ -83,18 +84,18 @@ const VideoTrimmer: React.FC<VideoTrimmerProps> = ({
     const updatedCuts = [...cuts, newCut];
     setCuts(updatedCuts);
     onCutsChange?.(updatedCuts);
-    message.success("برش جدید اضافه شد");
-  }, [cuts, totalDuration, onCutsChange, message]);
+    showMessage("برش جدید اضافه شد","success")
+  }, [cuts, totalDuration, onCutsChange,]);
 
   const updateCut = useCallback(
     (cutId: string, updates: Partial<VideoCut>) => {
       const updatedCuts = cuts.map((cut) =>
-        cut.id === cutId ? { ...cut, ...updates } : cut,
+        cut.id === cutId ? { ...cut, ...updates } : cut
       );
       setCuts(updatedCuts);
       onCutsChange?.(updatedCuts);
     },
-    [cuts, onCutsChange],
+    [cuts, onCutsChange]
   );
 
   const deleteCut = useCallback(
@@ -102,20 +103,17 @@ const VideoTrimmer: React.FC<VideoTrimmerProps> = ({
       const updatedCuts = cuts.filter((cut) => cut.id !== cutId);
       setCuts(updatedCuts);
       onCutsChange?.(updatedCuts);
-      message.success("برش حذف شد");
+    showMessage("برش حذف شد","info")
     },
-    [cuts, onCutsChange, message],
+    [cuts, onCutsChange]
   );
- const totalCutDuration = cuts.reduce(
+  const totalCutDuration = cuts.reduce(
     (total, cut) => total + (cut.endTime - cut.startTime),
-    0,
+    0
   );
   const handleConfirm = () => {
-   
-    message.info(totalCutDuration);
-  }
-
- 
+    showModal(`مجموع زمان برش شده :${formatDuration(totalCutDuration)}`,"info")
+  };
 
   return (
     <div className="w-full  mx-auto p-6 space-y-6" dir="rtl">
@@ -132,15 +130,11 @@ const VideoTrimmer: React.FC<VideoTrimmerProps> = ({
       >
         <Space direction="vertical" size="large" className="w-full">
           <div className="flex justify-start">
-            <Button
-              icon={<PlusOutlined />}
-              onClick={addNewCut}
-              size="large"
-            >
+            <Button icon={<PlusOutlined />} onClick={addNewCut} size="large">
               افزودن برش جدید
             </Button>
           </div>
-          <Space direction="vertical"  className="w-full">
+          <Space direction="vertical" className="w-full">
             {cuts.map((cut) => (
               <Timeline
                 key={cut.id}
@@ -170,15 +164,14 @@ const VideoTrimmer: React.FC<VideoTrimmerProps> = ({
               disabled={hasOverlaps.size > 0}
               className={twMerge(
                 "px-12 py-3 h-auto",
-                hasOverlaps.size > 0 && "opacity-50",
+                hasOverlaps.size > 0 && "opacity-50"
               )}
             >
-              <span >تایید</span>
+              <span>تایید</span>
             </Button>
           </div>
         </Space>
       </Card>
-
     </div>
   );
 };
