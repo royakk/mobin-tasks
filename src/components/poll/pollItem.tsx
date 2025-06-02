@@ -62,7 +62,7 @@ export const PollItem = ({ poll, onEdit, onDelete, index }: PollItemProps) => {
   );
 
   return (
-    <Collapse ghost={true} expandIconPosition="end">
+    <Collapse ghost={true} expandIconPosition="end" className="[&_.ant-collapse-header]:!flex [&_.ant-collapse-header]:!items-center">
       <Panel
         className={
           index % 2 === 0 ? "bg-gray-200 " : "bg-white"
